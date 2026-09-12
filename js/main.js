@@ -84,20 +84,31 @@
 
   /* -----------------------------------------------------
      BACKGROUND MUSIC (YouTube IFrame API)
-     Autoplay-with-sound is blocked by most mobile browsers,
-     so playback begins on the envelope tap itself — which is
-     already a user gesture, so this works reliably on iOS/Android.
+
+     Mobile browsers block *starting sound* outside a direct user
+     gesture — and by the time the YouTube API had finished loading
+     in the old version, the tap that triggered it was already
+     "stale", so sound never started.
+
+     Fix: the player starts playing MUTED the moment the page loads
+     (muted autoplay is always allowed). The envelope tap then just
+     calls unMute() synchronously inside the click handler — that's
+     a real, fresh user gesture, so browsers allow it.
+
+     A small "Tap for sound" pill appears as a safety net if, for
+     any reason, audio still isn't audible a couple of seconds
+     after opening.
      ----------------------------------------------------- */
   var ytPlayer = null;
   var ytReady = false;
-  var wantsPlay = false;
-  var isMuted = false;
+  var unmuteRequested = false;
 
   window.onYouTubeIframeAPIReady = function () {
     ytPlayer = new YT.Player("yt-player", {
       videoId: CONFIG.youtubeVideoId,
       playerVars: {
-        autoplay: 0,
+        autoplay: 1,
+        mute: 1,
         controls: 0,
         disablekb: 1,
         fs: 0,
@@ -107,9 +118,13 @@
         playlist: CONFIG.youtubeVideoId
       },
       events: {
-        onReady: function () {
+        onReady: function (e) {
           ytReady = true;
-          if (wantsPlay) ytPlayer.playVideo();
+          e.target.playVideo();
+          if (unmuteRequested) {
+            e.target.unMute();
+            e.target.playVideo();
+          }
         }
       }
     });
@@ -123,11 +138,31 @@
   })();
 
   function startMusic() {
-    wantsPlay = true;
-    if (ytReady && ytPlayer && ytPlayer.playVideo) {
+    // Called synchronously inside the envelope click handler —
+    // this is the real user gesture, so unmuting here is allowed.
+    unmuteRequested = true;
+    if (ytReady && ytPlayer) {
+      ytPlayer.unMute();
       ytPlayer.playVideo();
     }
+    // Safety net: if sound still hasn't kicked in, show a tappable prompt.
+    setTimeout(function () {
+      if (ytPlayer && ytPlayer.isMuted && ytPlayer.isMuted()) {
+        soundFallback.classList.add("is-visible");
+      }
+    }, 2200);
   }
+
+  var isMuted = false;
+  var soundFallback = document.getElementById("sound-fallback");
+
+  soundFallback.addEventListener("click", function () {
+    if (ytPlayer) {
+      ytPlayer.unMute();
+      ytPlayer.playVideo();
+    }
+    soundFallback.classList.remove("is-visible");
+  });
 
   musicToggle.addEventListener("click", function () {
     if (!ytPlayer) return;
@@ -136,6 +171,7 @@
       ytPlayer.mute();
     } else {
       ytPlayer.unMute();
+      ytPlayer.playVideo();
     }
     musicToggle.classList.toggle("is-muted", isMuted);
     musicToggle.setAttribute("aria-pressed", String(isMuted));
