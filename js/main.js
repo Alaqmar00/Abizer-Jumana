@@ -12,10 +12,7 @@
     // https://music.youtube.com/watch?v=ZZCg8QYodOI
     youtubeVideoId: "ZZCg8QYodOI",
 
-    countdownTarget: "2026-10-23T00:00:00", // local time
-
-    // Set rsvpUrl to a real link (form, WhatsApp, mailto) to activate the RSVP button.
-    rsvpUrl: ""
+    countdownTarget: "2026-10-23T00:00:00" // local time
   };
 
   /* -----------------------------------------------------
@@ -27,7 +24,9 @@
   var particlesWrap = document.getElementById("particles");
   var musicToggle = document.getElementById("music-toggle");
 
+  var envelopeScene = document.querySelector(".envelope-scene");
   var hasOpened = false;
+  var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function spawnParticles() {
     for (var i = 0; i < 18; i++) {
@@ -51,24 +50,43 @@
     if (hasOpened) return;
     hasOpened = true;
 
+    var t = reducedMotion
+      ? { open: 0, dissolve: 60, hide: 200, music: 250 }
+      : { open: 0, dissolve: 950, hide: 1650, music: 1350 };
+
+    // 1 — seal breaks, flap opens, a soft light glows from within
     envelopeTrigger.classList.add("is-opening");
     spawnParticles();
     startMusic();
 
-    // Reveal main content after the physical open animation plays out
+    // 2 — the envelope scene zooms slightly and dissolves, while the
+    //     real invitation fades/scales in underneath — one continuous
+    //     camera-push, not two cards fighting for the same space.
     setTimeout(function () {
       invitation.hidden = false;
       requestAnimationFrame(function () {
-        envelopeScreen.classList.add("is-hidden");
-        document.body.style.overflow = "";
-        initScrollReveal();
-        window.scrollTo({ top: 0, behavior: "auto" });
+        requestAnimationFrame(function () {
+          invitation.classList.add("is-in");
+        });
       });
-    }, 1500);
+      envelopeScene.classList.add("is-dissolving");
+    }, t.dissolve);
+
+    // 3 — envelope fully removed from flow, page scroll unlocked
+    setTimeout(function () {
+      envelopeScreen.classList.add("is-hidden");
+      document.body.style.overflow = "";
+      initScrollReveal();
+      window.scrollTo({ top: 0, behavior: "auto" });
+    }, t.hide);
 
     setTimeout(function () {
       musicToggle.classList.add("is-visible");
-    }, 1900);
+    }, t.music);
+
+    setTimeout(function () {
+      showScrollCue();
+    }, t.music + 500);
   }
 
   envelopeTrigger.addEventListener("click", openEnvelope);
@@ -214,6 +232,27 @@
   })();
 
   /* -----------------------------------------------------
+     SCROLL CUE — appears once the invitation has opened,
+     disappears the first time the visitor scrolls
+     ----------------------------------------------------- */
+  var scrollCue = document.getElementById("scroll-cue");
+  var scrollCueArmed = false;
+
+  function showScrollCue() {
+    scrollCueArmed = true;
+    scrollCue.classList.add("is-visible");
+    window.addEventListener("scroll", hideScrollCueOnScroll, { passive: true });
+  }
+  function hideScrollCueOnScroll() {
+    if (!scrollCueArmed) return;
+    if (window.scrollY > 30) {
+      scrollCue.classList.add("is-done");
+      window.removeEventListener("scroll", hideScrollCueOnScroll);
+      scrollCueArmed = false;
+    }
+  }
+
+  /* -----------------------------------------------------
      ADD TO CALENDAR
      Uses Google Calendar links. Where no time was supplied
      (Day Two, Day Three) the event is created as an all-day
@@ -262,28 +301,13 @@
   });
 
   /* -----------------------------------------------------
-     RSVP — only activates once a real destination is set
-     ----------------------------------------------------- */
-  (function setupRsvp() {
-    var rsvpBtn = document.getElementById("rsvp-btn");
-    var rsvpHint = document.getElementById("rsvp-hint");
-    if (CONFIG.rsvpUrl) {
-      rsvpBtn.href = CONFIG.rsvpUrl;
-      rsvpBtn.target = "_blank";
-      rsvpBtn.rel = "noopener noreferrer";
-      rsvpBtn.setAttribute("data-configured", "true");
-      rsvpHint.hidden = true;
-    } else {
-      rsvpBtn.addEventListener("click", function (e) { e.preventDefault(); });
-    }
-  })();
-
-  /* -----------------------------------------------------
      SCROLL REVEAL — one quiet pass, not per-card spam
      ----------------------------------------------------- */
   function initScrollReveal() {
+    // .card--hero already has its own entrance via .invitation.is-in,
+    // so it's excluded here to avoid a double fade.
     var targets = document.querySelectorAll(
-      ".card, .countdown-section, .celebrations__title, .celebrations__sub, .event-card, .location, .rsvp, .closing"
+      ".card:not(.card--hero), .countdown-section, .celebrations__title, .celebrations__sub, .event-card, .closing"
     );
     targets.forEach(function (el) { el.classList.add("reveal"); });
 
