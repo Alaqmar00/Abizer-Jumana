@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Abizer &amp; Jumana — A Love Letter</title>
+<meta name="description" content="You are cordially invited to the wedding celebrations of Abizer &amp; Jumana, 23–25 October 2026.">
+
+<!-- Open Graph so the WhatsApp preview looks intentional -->
+<meta property="og:title" content="Abizer &amp; Jumana — A Love Letter">
+<meta property="og:description" content="Join us for our wedding celebrations, 23–25 October 2026.">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Tangerine:wght@400;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ============ NOISE / GRAIN OVERLAY ============ -->
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ============ MUSIC CONTROL ============ -->
+<button id="music-toggle" class="music-toggle" aria-label="Toggle music" aria-pressed="false">
+  <span class="music-toggle__icon" aria-hidden="true">
+    <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M9 18V6l10-2v12"/><circle fill="currentColor" cx="6.5" cy="18.5" r="2.5"/><circle fill="currentColor" cx="16.5" cy="16.5" r="2.5"/></svg>
+  </span>
+  <span class="music-toggle__label">Music</span>
+</button>
+
+<!-- Hidden YouTube player for background music -->
+<div id="yt-player" class="yt-player" aria-hidden="true"></div>
+
+<!-- Safety-net prompt if sound didn't start automatically -->
+<button id="sound-fallback" class="sound-fallback" type="button">Tap for sound ♪</button>
+
+<!-- ============ SCREEN 1 — ENVELOPE ============ -->
+<section id="envelope-screen" class="envelope-screen">
+  <div class="envelope-screen__ornament envelope-screen__ornament--tl" aria-hidden="true"></div>
+  <div class="envelope-screen__ornament envelope-screen__ornament--tr" aria-hidden="true"></div>
+  <div class="envelope-screen__ornament envelope-screen__ornament--bl" aria-hidden="true"></div>
+  <div class="envelope-screen__ornament envelope-screen__ornament--br" aria-hidden="true"></div>
+
+  <div class="envelope-scene">
+    <p class="envelope-scene__eyebrow">A love letter from</p>
+
+    <button id="envelope-trigger" class="envelope" aria-label="Open the invitation">
+      <span class="envelope__back"></span>
+      <span class="envelope__card">
+        <span class="envelope__card-inner">
+          <span class="envelope__card-names">Abizer<br><em>&amp;</em><br>Jumana</span>
+        </span>
+      </span>
+      <span class="envelope__flap"></span>
+      <span class="envelope__seal">
+        <svg viewBox="0 0 100 100" width="56" height="56" aria-hidden="true">
+          <circle cx="50" cy="50" r="46" fill="url(#seal-grad)"/>
+          <circle cx="50" cy="50" r="46" fill="none" stroke="rgba(0,0,0,0.25)" stroke-width="1"/>
+          <text x="50" y="58" text-anchor="middle" font-family="'Tangerine', cursive" font-size="46" fill="#3a2410">A&amp;J</text>
+          <defs>
+            <radialGradient id="seal-grad" cx="35%" cy="30%" r="75%">
+              <stop offset="0%" stop-color="#d6b26a"/>
+              <stop offset="55%" stop-color="#b08d57"/>
+              <stop offset="100%" stop-color="#8a6a3c"/>
+            </radialGradient>
+          </defs>
+        </svg>
+      </span>
+    </button>
+
+    <p class="envelope-scene__names">Abizer &amp; Jumana</p>
+    <p class="envelope-scene__cta">Open the Invitation</p>
+  </div>
+
+  <div class="particles" id="particles" aria-hidden="true"></div>
+</section>
+
+<!-- ============ MAIN INVITATION ============ -->
+<main id="invitation" class="invitation" hidden>
+
+  <!-- ---- HERO / FIRST CARD ---- -->
+  <section class="card card--hero">
+    <div class="card__frame">
+      <p class="bismillah">Bismillah-ir-Rahman-ir-Raheem</p>
+
+      <p class="blessing">
+        By the grace of Allah, Vasila-e-Panjatan Pak (A.S), Eternal blessings of
+        Dr. Syedna Mohammed Burhanuddin (R.A) &amp; Dua Mubarak of Syedna Aali Qadar
+        Mufaddal Saifuddin (T.U.S)
+      </p>
+
+      <div class="divider" aria-hidden="true"><span></span></div>
+
+      <p class="request-line">
+        Mrs. Jumana Bhaisaheb &amp; Mr. Johar Bhaisaheb<br>
+        request your gracious presence on the auspicious occasion of<br>
+        Wedding Ceremony of their son
+      </p>
+
+      <div class="couple-names">
+        <span class="couple-names__name">Abizer</span>
+        <span class="couple-names__weds">Weds</span>
+        <span class="couple-names__name">Jumana</span>
+      </div>
+
+      <p class="parents-line">(D/o Mrs. Tasneem &amp; Mr. Mannan Sageer)</p>
+
+      <p class="arabic-line" dir="rtl" lang="ar">ان شَاءَ اللَّهُ</p>
+    </div>
+  </section>
+
+  <!-- ---- SPECIAL REQUEST ---- -->
+  <section class="card card--special">
+    <div class="card__frame card__frame--compact">
+      <p class="eyebrow-soft">Special Request</p>
+      <p class="special-names">Mohammed &amp; Alefiya Murtaza</p>
+      <p class="special-sub">[Ali Bhaisaheb &amp; Dadu Family]</p>
+
+      <div class="divider divider--sm" aria-hidden="true"><span></span></div>
+
+      <p class="cordial-line">A cordial invitation from:</p>
+      <p class="special-names special-names--sm">Mrs. Jumana &amp; Mr. Johar Ali Bhaisaheb</p>
+
+      <address class="invite-address">
+        SC-315, Mohammedi Villa,<br>
+        Shastri Colony
+      </address>
+    </div>
+  </section>
+
+  <!-- ---- COUNTDOWN ---- -->
+  <section class="countdown-section">
+    <p class="countdown-section__label">Counting the days until</p>
+    <p class="countdown-section__date">23 October 2026</p>
+    <div id="countdown" class="countdown" role="timer" aria-live="off">
+      <div class="countdown__unit"><span id="cd-days" class="countdown__num">00</span><span class="countdown__unit-label">Days</span></div>
+      <div class="countdown__unit"><span id="cd-hours" class="countdown__num">00</span><span class="countdown__unit-label">Hours</span></div>
+      <div class="countdown__unit"><span id="cd-mins" class="countdown__num">00</span><span class="countdown__unit-label">Minutes</span></div>
+      <div class="countdown__unit"><span id="cd-secs" class="countdown__num">00</span><span class="countdown__unit-label">Seconds</span></div>
+    </div>
+    <p id="countdown-fallback" class="countdown-section__fallback" hidden>With hearts full of joy, the celebrations have begun.</p>
+  </section>
+
+  <!-- ---- WEDDING CELEBRATIONS ---- -->
+  <section class="celebrations">
+    <h2 class="celebrations__title">Our Wedding Celebrations</h2>
+    <p class="celebrations__sub">Three days, three traditions, one union</p>
+
+    <div class="timeline">
+
+      <article class="event-card event-card--one">
+        <div class="event-card__marker">
+          <span class="event-card__day-no">I</span>
+        </div>
+        <div class="event-card__body">
+          <p class="event-card__day">Day One</p>
+          <p class="event-card__date">23 October 2026 · Friday</p>
+          <p class="event-card__programme">Morning Programme</p>
+          <p class="event-card__name">Mama Musaala &amp; Katha Ni Rasam</p>
+          <p class="event-card__time">9:53 A.M.</p>
+          <button class="cal-btn" data-cal="day1">Add Day One to Calendar</button>
+        </div>
+      </article>
+
+      <article class="event-card event-card--two">
+        <div class="event-card__marker">
+          <span class="event-card__day-no">II</span>
+        </div>
+        <div class="event-card__body">
+          <p class="event-card__day">Day Two</p>
+          <p class="event-card__date">24 October 2026 · Saturday</p>
+          <p class="event-card__programme">Evening Programme</p>
+          <p class="event-card__name">Shehar Gasht<br><span class="event-card__name-sub">(Procession)</span></p>
+          <button class="cal-btn" data-cal="day2">Add Day Two to Calendar</button>
+        </div>
+      </article>
+
+      <article class="event-card event-card--three">
+        <div class="event-card__marker">
+          <span class="event-card__day-no">III</span>
+        </div>
+        <div class="event-card__body">
+          <p class="event-card__day">Day Three</p>
+          <p class="event-card__date">25 October 2026 · Sunday</p>
+          <p class="event-card__programme">Evening Programme</p>
+          <p class="event-card__name">Valeema Nu Jaman<br>&amp; Musafo</p>
+          <button class="cal-btn" data-cal="day3">Add Day Three to Calendar</button>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ---- LOCATION ---- -->
+  <section class="location">
+    <h2 class="section-title">Location</h2>
+    <div class="location__card">
+      <p class="location__placeholder">Venue details to be added</p>
+      <p class="location__hint">This section is ready for a map and address once the venue is confirmed.</p>
+    </div>
+  </section>
+
+  <!-- ---- RSVP ---- -->
+  <section class="rsvp">
+    <h2 class="section-title">RSVP</h2>
+    <p class="rsvp__copy">We would be honoured to have you celebrate with us.</p>
+    <a href="#" id="rsvp-btn" class="rsvp__btn" data-configured="false">RSVP</a>
+    <p class="rsvp__hint" id="rsvp-hint">RSVP link to be added</p>
+  </section>
+
+  <!-- ---- CLOSING SCREEN ---- -->
+  <section class="closing">
+    <div class="closing__frame">
+      <p class="closing__line">With love and duas,</p>
+      <p class="closing__names">Abizer &amp; Jumana</p>
+      <p class="closing__arabic" dir="rtl" lang="ar">ان شَاءَ اللَّهُ</p>
+    </div>
+  </section>
+
+  <!-- ---- FOOTER ---- -->
+  <footer class="site-footer">
+    <p class="site-footer__label">Created with love by</p>
+    <a href="https://www.instagram.com/vision.murtaza?stkn=MXZ0MXVoNGU5c3hhbQ%3D%3D" target="_blank" rel="noopener noreferrer" class="site-footer__handle">
+      <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.64.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92-.06-1.27-.07-1.65-.07-4.85s.02-3.58.07-4.85c.15-3.23 1.66-4.77 4.92-4.92 1.27-.06 1.65-.07 4.85-.07M12 0C8.74 0 8.33.01 7.05.07c-4.35.2-6.78 2.62-6.98 6.98C.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.2 4.36 2.62 6.78 6.98 6.98C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c4.35-.2 6.78-2.62 6.98-6.98.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.2-4.35-2.62-6.78-6.98-6.98C15.67.01 15.26 0 12 0Zm0 5.84A6.16 6.16 0 1 0 12 18.16 6.16 6.16 0 0 0 12 5.84Zm0 10.16a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm6.41-10.4a1.44 1.44 0 1 1-2.88 0 1.44 1.44 0 0 1 2.88 0Z"/></svg>
+      @vision.murtaza
+    </a>
+  </footer>
+
+</main>
+
+<script src="js/main.js"></script>
+</body>
+</html>
